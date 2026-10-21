@@ -1,0 +1,8 @@
+<input
+  type="checkbox"
+  class="size-4 shrink-0 cursor-pointer rounded border-slate-300 text-gd-primary accent-gd-primary"
+  [checked]="checked()"
+  [disabled]="disabled()"
+  (change)="toggle()"
+/>
+<span class="text-sm text-slate-700"><ng-content /></span>

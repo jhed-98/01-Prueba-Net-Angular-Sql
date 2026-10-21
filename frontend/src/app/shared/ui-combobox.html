@@ -1,0 +1,11 @@
+<app-ui-select
+  [id]="id()"
+  [options]="options()"
+  [placeholder]="placeholder()"
+  [searchPlaceholder]="searchPlaceholder()"
+  [searchable]="true"
+  [disabled]="isDisabled()"
+  [invalid]="invalid()"
+  [value]="valorInterno()"
+  (valueChange)="onValueChange($event)"
+/>

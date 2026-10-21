@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WinServices.Api.Domain\WinServices.Api.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Validaciones declarativas -->
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <!-- Registro automático de validadores (AddValidatorsFromAssemblyContaining) -->
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <!-- IServiceCollection disponible en la capa de aplicación -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <!-- Mapeo de objetos por source generation (sin reflection en runtime).
+         'compile' en IncludeAssets expone los atributos [Mapper], [MapProperty], etc.
+         'PrivateAssets=all' evita que se propague como dependencia de runtime. -->
+    <PackageReference Include="Riok.Mapperly" Version="4.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>compile; runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!-- ILogger<T> disponible en la capa de aplicación sin depender del framework web -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>

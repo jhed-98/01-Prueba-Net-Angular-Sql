@@ -1,0 +1,80 @@
+<div class="relative w-full">
+  <!-- Botón Trigger del Select -->
+  <button
+    type="button"
+    [id]="id()"
+    [disabled]="isDisabled()"
+    [class]="triggerClass()"
+    [attr.aria-expanded]="abierto()"
+    (click)="toggleOpen()"
+  >
+    <span class="truncate" [class.text-slate-400]="!labelSeleccionado()">
+      {{ labelSeleccionado() || placeholder() }}
+    </span>
+    <svg
+      lucideChevronDown
+      [size]="16"
+      class="shrink-0 text-slate-400 transition-transform duration-200"
+      [class.rotate-180]="abierto()"
+    ></svg>
+  </button>
+
+  <!-- Panel Desplegable (Estilo Spartan UI / Shadcn) -->
+  @if (abierto()) {
+    <div
+      class="absolute left-0 top-full z-50 mt-1 max-h-60 w-full min-w-[10rem] flex flex-col overflow-hidden rounded-xl border border-gd-border bg-white shadow-xl shadow-slate-900/10 duration-150 animate-in fade-in-0 zoom-in-95"
+      role="listbox"
+    >
+      @if (searchable()) {
+        <div class="border-b border-slate-100 bg-slate-50/70 p-2" (click)="$event.stopPropagation()">
+          <div class="relative flex items-center">
+            <svg lucideSearch [size]="14" class="pointer-events-none absolute left-2.5 text-slate-400"></svg>
+            <input
+              #searchInput
+              type="text"
+              class="h-8 w-full rounded-md border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-800 placeholder-slate-400 focus:border-slate-800 focus:outline-hidden focus:ring-1 focus:ring-slate-900/15"
+              [placeholder]="searchPlaceholder()"
+              [value]="filtroBusqueda()"
+              (input)="onSearchInput($event)"
+              (keydown)="onSearchKeydown($event)"
+            />
+            @if (filtroBusqueda()) {
+              <button
+                type="button"
+                class="absolute right-1.5 flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                (click)="limpiarFiltro($event)"
+                aria-label="Limpiar búsqueda"
+              >
+                <svg lucideX [size]="12"></svg>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="max-h-52 overflow-y-auto p-1">
+        @for (opt of opcionesFiltradas(); track opt.value) {
+          <div
+            role="option"
+            [attr.aria-selected]="esSeleccionado(opt.value)"
+            [class]="opcionClass(opt)"
+            (click)="seleccionarOpcion(opt)"
+          >
+            <span class="truncate">{{ opt.label }}</span>
+            @if (esSeleccionado(opt.value)) {
+              <svg lucideCheck [size]="15" class="shrink-0 text-slate-900 stroke-[2.5]"></svg>
+            }
+          </div>
+        } @empty {
+          <div class="px-3 py-3 text-center text-xs text-slate-400">
+            @if (filtroBusqueda()) {
+              No se encontraron resultados para "{{ filtroBusqueda() }}"
+            } @else {
+              No hay opciones disponibles
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

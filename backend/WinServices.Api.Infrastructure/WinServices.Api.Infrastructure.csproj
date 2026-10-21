@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WinServices.Api.Application\WinServices.Api.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ASP.NET Core (HttpContext, RequestDelegate, IHttpContextAccessor) para middleware. -->
+    <!-- No agrega peso al despliegue: los ensamblados viven en el runtime compartido. -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ORM: Dapper (micro-ORM). Para cambiar de proveedor de BD ver README. -->
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <!-- Conector SQL Server -->
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+
+    <!-- Hashing de contraseñas -->
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+
+    <!-- Cliente HTTP para consumir APIs externas -->
+    <PackageReference Include="RestSharp" Version="114.0.0" />
+
+    <!-- Resiliencia: circuit breaker, retry, timeout para clientes HTTP externos -->
+    <PackageReference Include="Polly" Version="8.6.2" />
+
+    <!-- Caché distribuido: Redis -->
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+
+    <!-- Mensajería asíncrona: RabbitMQ -->
+    <PackageReference Include="RabbitMQ.Client" Version="7.0.0" />
+
+    <!-- Hosted services (BackgroundService) para consumidores RabbitMQ -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0" />
+
+    <!-- Health Checks: IHealthCheck, HealthCheckResult -->
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.0" />
+
+    <!-- JWT -->
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.4.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
+    <!-- IServiceCollection disponible en la capa de infraestructura -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+</Project>

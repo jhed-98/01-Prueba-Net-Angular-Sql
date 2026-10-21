@@ -1,0 +1,22 @@
+services:
+  winservices.api:
+    image: mcr.microsoft.com/dotnet/aspnet:10.0
+    container_name: winservices.api_api
+    working_dir: /app
+    volumes:
+      - ./publish:/app
+    entrypoint: ["dotnet", "WinServices.Api.Api.dll"]
+    ports:
+      - "5000:5000"
+    environment:
+      TZ: America/Lima
+    env_file:
+      - .env
+    networks:
+      - win_network
+
+networks:
+  win_network:
+    # Red externa compartida con el stack de observabilidad (win-services-logs-stack).
+    # Crear una sola vez con: docker network create win_network
+    external: true

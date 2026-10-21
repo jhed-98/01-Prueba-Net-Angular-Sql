@@ -1,0 +1,101 @@
+<div class="relative w-full">
+  <!-- Botón Trigger del Combobox Asíncrono -->
+  <button
+    type="button"
+    [id]="id()"
+    [disabled]="isDisabled()"
+    [class]="triggerClass()"
+    [attr.aria-expanded]="abierto()"
+    (click)="toggleOpen()"
+  >
+    <span class="truncate" [class.text-slate-400]="!textoSeleccionado()">
+      {{ textoSeleccionado() || placeholder() }}
+    </span>
+    <div class="flex items-center gap-1">
+      @if (cargando()) {
+        <svg lucideLoader2 [size]="15" class="shrink-0 animate-spin text-slate-400"></svg>
+      } @else {
+        <svg
+          lucideChevronDown
+          [size]="16"
+          class="shrink-0 text-slate-400 transition-transform duration-200"
+          [class.rotate-180]="abierto()"
+        ></svg>
+      }
+    </div>
+  </button>
+
+  <!-- Panel Desplegable Remoto -->
+  @if (abierto()) {
+    <div
+      class="absolute left-0 top-full z-50 mt-1 max-h-64 w-full min-w-[12rem] flex flex-col overflow-hidden rounded-xl border border-gd-border bg-white shadow-xl shadow-slate-900/10 duration-150 animate-in fade-in-0 zoom-in-95"
+      role="listbox"
+    >
+      <!-- Barra de Búsqueda Interactiva -->
+      <div class="border-b border-slate-100 bg-slate-50/70 p-2" (click)="$event.stopPropagation()">
+        <div class="relative flex items-center">
+          @if (cargando()) {
+            <svg lucideLoader2 [size]="14" class="pointer-events-none absolute left-2.5 animate-spin text-slate-500"></svg>
+          } @else {
+            <svg lucideSearch [size]="14" class="pointer-events-none absolute left-2.5 text-slate-400"></svg>
+          }
+          <input
+            #searchInput
+            type="text"
+            class="h-8 w-full rounded-md border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-800 placeholder-slate-400 focus:border-slate-800 focus:outline-hidden focus:ring-1 focus:ring-slate-900/15"
+            [placeholder]="searchPlaceholder()"
+            [value]="filtroBusqueda()"
+            (input)="onSearchInput($event)"
+            (keydown)="onSearchKeydown($event)"
+          />
+          @if (filtroBusqueda()) {
+            <button
+              type="button"
+              class="absolute right-1.5 flex h-5 w-5 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+              (click)="limpiarFiltro($event)"
+              aria-label="Limpiar búsqueda"
+            >
+              <svg lucideX [size]="12"></svg>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Lista de Opciones o Estados -->
+      <div class="max-h-52 overflow-y-auto p-1">
+        @if (cargando()) {
+          <div class="flex items-center justify-center gap-2 px-3 py-4 text-xs text-slate-500">
+            <svg lucideLoader2 [size]="15" class="animate-spin text-slate-600"></svg>
+            <span>{{ loadingText() }}</span>
+          </div>
+        } @else if (errorHttp()) {
+          <div class="px-3 py-3 text-center text-xs text-red-600">
+            {{ errorHttp() }}
+          </div>
+        } @else if (filtroBusqueda().trim().length < minChars()) {
+          <div class="px-3 py-3 text-center text-xs text-slate-400">
+            {{ minCharsTextComputed() }}
+          </div>
+        } @else {
+          @for (opt of opciones(); track opt.value) {
+            <div
+              role="option"
+              [attr.aria-selected]="esSeleccionado(opt.value)"
+              [class]="opcionClass(opt)"
+              (click)="seleccionarOpcion(opt)"
+            >
+              <span class="truncate">{{ opt.label }}</span>
+              @if (esSeleccionado(opt.value)) {
+                <svg lucideCheck [size]="15" class="shrink-0 text-slate-900 stroke-[2.5]"></svg>
+              }
+            </div>
+          } @empty {
+            <div class="px-3 py-3 text-center text-xs text-slate-400">
+              {{ noResultsText() }} para "{{ filtroBusqueda() }}"
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

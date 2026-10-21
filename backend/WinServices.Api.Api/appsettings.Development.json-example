@@ -1,0 +1,59 @@
+{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "Microsoft.AspNetCore": "Warning",
+        "System": "Warning"
+      }
+    },
+    "WriteTo": [
+      { "Name": "Console" },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/winservices.api-.log",
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 7
+        }
+      }
+    ],
+    "Enrich": [ "FromLogContext" ],
+    "Properties": {
+      "Application": "WinServices.Api.API"
+    }
+  },
+  "ConnectionStrings": {
+     "DefaultConnection": "Server=EDWARD\SQLEXPRESS;Database=PE_WINET_CRM;Trusted_Connection=True;TrustServerCertificate=True;"
+  },
+  "JwtSettings": {
+    "Secret": "SuperSecretKeyForDevelopmentAndTesting123!!"
+  },
+  "Redis": {
+    "ConnectionString": "localhost:6379"
+  },
+  "RabbitMQ": {
+    "Host": "localhost",
+    "Port": "5672",
+    "Username": "guest",
+    "Password": "guest",
+    "VirtualHost": "/",
+    "LogsExchange": "logs_exchange"
+  },
+  "OpenTelemetry": {
+    "ServiceName": "WinServices.Api",
+    "OtlpEndpoint": "http://jaeger:4317"
+  },
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://+:5000"
+      }
+    }
+  },
+  "ApiVersioning": {
+    "DefaultMajorVersion": 1,
+    "DefaultMinorVersion": 0
+  }
+}

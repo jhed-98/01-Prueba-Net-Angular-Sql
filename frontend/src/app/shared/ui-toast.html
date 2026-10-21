@@ -1,0 +1,15 @@
+@if (open()) {
+  <div class="fixed bottom-5 right-5 z-50 flex items-center gap-3 rounded-xl border p-4 shadow-xl animate-in slide-in-from-bottom-5 bg-white"
+    [class.border-emerald-200]="tone() === 'success'"
+    [class.border-red-200]="tone() === 'error'"
+    [class.border-blue-200]="tone() === 'info'"
+  >
+    <span class="size-2.5 rounded-full"
+      [class.bg-emerald-500]="tone() === 'success'"
+      [class.bg-red-500]="tone() === 'error'"
+      [class.bg-blue-500]="tone() === 'info'"
+    ></span>
+    <p class="text-xs font-medium text-slate-700">{{ message() }}</p>
+    <button type="button" (click)="closed.emit()" class="text-slate-400 hover:text-slate-600 text-xs ml-2 cursor-pointer font-semibold" aria-label="Cerrar notificación">✕</button>
+  </div>
+}
