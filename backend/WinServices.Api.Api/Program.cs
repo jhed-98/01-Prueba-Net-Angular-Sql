@@ -141,7 +141,12 @@ try
         options.AssumeDefaultVersionWhenUnspecified = true;
         options.ReportApiVersions              = true;
         options.ApiVersionReader               = new UrlSegmentApiVersionReader();
-    }).AddMvc();
+    }).AddMvc()
+      .AddApiExplorer(options =>
+      {
+          options.GroupNameFormat           = "'v'VVV";
+          options.SubstituteApiVersionInUrl = true;
+      });
 
     // ── Auth JWT (OPCIONAL) ──────────────────────────────────────────────────
     // Si "JwtSettings:Secret" está vacío, la app arranca igual: /health y endpoints
@@ -184,6 +189,12 @@ try
         .WithTitle(serviceName)
         .AddPreferredSecuritySchemes("BearerAuth")
         .AddHttpAuthentication("BearerAuth", auth => { auth.Token = ""; }));
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+        options.RoutePrefix = string.Empty;
+    });
 
     if (!app.Environment.IsDevelopment())
     {

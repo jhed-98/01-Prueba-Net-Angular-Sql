@@ -1,0 +1,101 @@
+<div class="space-y-6 max-w-5xl mx-auto">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-xl font-bold text-slate-800">Gestión de Tareas</h2>
+      <p class="text-xs text-slate-500">Listado y registro de tareas.</p>
+    </div>
+    <button uiButton variant="primary" (click)="abrirModalCreacion()">+ Nueva Tarea</button>
+  </div>
+
+  <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
+    <table class="w-full text-left text-xs">
+      <thead class="border-b border-slate-200 bg-slate-50 font-semibold text-slate-700">
+        <tr>
+          <th class="px-4 py-3">Título</th>
+          <th class="px-4 py-3">Categoría</th>
+          <th class="px-4 py-3">Fecha Inicio</th>
+          <th class="px-4 py-3">Estado</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (t of tareas(); track t.id) {
+          <tr class="hover:bg-slate-50/70 transition-colors">
+            <td class="px-4 py-3 font-medium text-slate-800">{{ t.titulo }}</td>
+            <td class="px-4 py-3 text-slate-600">{{ t.categoriaNombre }}</td>
+            <td class="px-4 py-3 text-slate-600">{{ t.fechaInicio | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td class="px-4 py-3">
+              <span uiBadge [tone]="tonoEstado(t.estado)">{{ t.estado }}</span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="px-4 py-8 text-center text-slate-400">No hay tareas disponibles.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <app-ui-modal
+    [open]="modalAbierto()"
+    title="Nueva Tarea"
+    description="Ingresa los datos para registrar una nueva tarea."
+    (closed)="modalAbierto.set(false)"
+  >
+    <form [formGroup]="form" (ngSubmit)="guardarNueva()" class="space-y-4">
+      <div>
+        <app-ui-input label="Título" placeholder="Ej. Instalación FO - San Borja" formControlName="titulo" />
+        @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+          <p class="mt-1 text-[11px] text-red-600">El título es obligatorio (3 a 150 caracteres).</p>
+        }
+      </div>
+
+      <div>
+        <app-ui-input label="Descripción" placeholder="Opcional" formControlName="descripcion" />
+        @if (form.controls.descripcion.touched && form.controls.descripcion.invalid) {
+          <p class="mt-1 text-[11px] text-red-600">Máximo 500 caracteres.</p>
+        }
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <app-ui-input label="Fecha de Inicio" type="datetime-local" formControlName="fechaInicio" />
+          @if (form.controls.fechaInicio.touched && form.controls.fechaInicio.invalid) {
+            <p class="mt-1 text-[11px] text-red-600">La fecha de inicio es obligatoria.</p>
+          }
+        </div>
+        <div>
+          <app-ui-input label="Fecha de Fin (opcional)" type="datetime-local" formControlName="fechaFin" />
+          @if (form.hasError('fechaFinMenor') && form.controls.fechaFin.touched) {
+            <p class="mt-1 text-[11px] text-red-600">La fecha fin no puede ser menor que la de inicio.</p>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Categoría</label>
+        <app-ui-select
+          formControlName="categoriaId"
+          [options]="categorias"
+          placeholder="Seleccione categoría"
+          [invalid]="form.controls.categoriaId.touched && form.controls.categoriaId.invalid"
+        />
+        @if (form.controls.categoriaId.touched && form.controls.categoriaId.invalid) {
+          <p class="mt-1 text-[11px] text-red-600">La categoría es obligatoria.</p>
+        }
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" uiButton variant="outline" (click)="modalAbierto.set(false)">Cancelar</button>
+        <button type="submit" uiButton variant="primary" [disabled]="guardando()">Guardar</button>
+      </div>
+    </form>
+  </app-ui-modal>
+
+  <app-ui-toast
+    [open]="toast().open"
+    [tone]="toast().tone"
+    [message]="toast().message"
+    (closed)="cerrarToast()"
+  />
+</div>

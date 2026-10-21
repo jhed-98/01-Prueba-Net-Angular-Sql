@@ -20,6 +20,7 @@ public static class DependencyInjection
 
         // TODO: Registra aquí tus servicios de aplicación reales
         services.AddScoped<IExampleService, ExampleService>();
+        services.AddScoped<ITareaService, TareaService>();
         return services;
     }
 }

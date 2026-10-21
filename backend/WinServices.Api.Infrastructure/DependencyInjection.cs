@@ -43,6 +43,7 @@ public static class DependencyInjection
         // ── Repositorios ──────────────────────────────────────────────────────
         // Registra aquí tus repositorios (Interfaz en Application -> Implementación en Infrastructure)
         services.AddScoped<IExampleRepository, ExampleRepository>();
+        services.AddScoped<ITareaRepository, TareaRepository>();
 
         // ── Auth ──────────────────────────────────────────────────────────────
         services.AddScoped<IJwtProvider, JwtProvider>();

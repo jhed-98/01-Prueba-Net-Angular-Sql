@@ -11,6 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="10.0.0" />
+    <!-- Instalar para el Manejo de Versiones y Swagger -->
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.1" />
     <!-- JWT Bearer — necesario aunque sea SDK.Web en .NET 10 -->
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <!-- OpenAPI nativo .NET 10 + Scalar UI (reemplaza Swashbuckle, incompatible con OpenApi 2.0) -->
